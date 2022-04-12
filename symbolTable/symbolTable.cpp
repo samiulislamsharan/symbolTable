@@ -1,27 +1,27 @@
-// symbolTable.cpp : This file contains the 'main' function. Program execution begins and ends there.
+/// symbolTable.cpp : This file contains the 'main' function. Program execution begins and ends there.
+/// >This program uses Color.Comment (2022) Visual Studio extension for colored comment, this line should look red. 
+/// We will build a symbol-table in this assignment. At this initial stage of the project,
+/// we will count  many details regarding an actual symbol-table and we will simply adhere to the basic concept that
+/// "a symbol-table is an efficient data-dictionary for the symbols used in a program".
+/// Thus, our focus in this assignment is to construct a simple hash-based data-dictionary.
 
-// We will build a symbol-table in this assignment. At this initial stage of the project,
-// we will count  many details regarding an actual symbol-table and we will simply adhere to the basic concept that
-// "a symbol-table is an efficient data-dictionary for the symbols used in a program".
-// Thus, our focus in this assignment is to construct a simple hash-based data-dictionary.
+/// Input:
+/// The input to your program will be a sequence of two-tuples, where each element in each tuple is a string.
+/// An example of input sequence is given below.
 
-// Input:
-// The input to your program will be a sequence of two-tuples, where each element in each tuple is a string.
-// An example of input sequence is given below.
+/// -> int, INTEGER
+/// -> myFunction, FUNCTION
+/// -> x, IDENTIFIER
+/// -> 5, NUMBER
 
-// -> int, INTEGER
-// -> myFunction, FUNCTION
-// -> x, IDENTIFIER
-// -> 5, NUMBER
+/// NOTE: Use these console input as an example.
+/// -> int INTEGER
+/// -> myFunction FUNCTION
+/// -> x IDENTIFIER
+/// -> 5 NUMBER
 
-// NOTE: Use these console input as an example.
-// -> int INTEGER
-// -> myFunction FUNCTION
-// -> x IDENTIFIER
-// -> 5 NUMBER
-
-// The first element of each tuple will be the key of the record to be stored in the symbol-table.
-// Hence, you have to apply the hash function on the first element of each tuple.
+/// The first element of each tuple will be the key of the record to be stored in the symbol-table.
+/// Hence, you have to apply the hash function on the first element of each tuple.
 
 #include <iostream>
 #include <cstring>
@@ -32,7 +32,7 @@ using namespace std;
 
 #define MAX_LENGTH 20
 
-class SymbolInfo { // class for storing a symbol and its type with a next pointer
+class SymbolInfo { /// Class for storing a ^symbol and its type with a next pointer
 public:
 	string symbol;
 	string type;
@@ -54,11 +54,10 @@ public:
 
 SymbolInfo* block[MAX_LENGTH];
 
-class SymbolTable {
-	// Class creating a hash table, functions to insert, search, dump, delete symbols
+class SymbolTable {	/// Class creating a hash table, functions to .insert, .search, .dump, .delete symbols
 
 public:
-	// Set the SymbolTable to NULL at the beginning of the program
+	/// Set the SymbolTable to @NULL at the beginning of the program
 	SymbolTable() {
 		for (int i = 0; i < MAX_LENGTH; i++)
 			block[i] = NULL;
@@ -72,16 +71,16 @@ public:
 	bool erase(string symbol);               // Function to delete a certain input symbol
 };
 
-// Function for setting the font color in the console
+/// Function for setting the font color in the console
 void SetColor(int ForegroundColor) {
 	WORD wColor;
 
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	// We use csbi for the wAttributes word.
+	/// We use csbi for the wAttributes word.
 	if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		// Mask out all but the background attribute, and add in the foreground color
+		/// Mask out all but the background attribute, and add in the foreground color
 		wColor = (csbi.wAttributes & 0xF0) + (ForegroundColor & 0x0F);
 		SetConsoleTextAttribute(hStdOut, wColor);
 	}
@@ -89,28 +88,28 @@ void SetColor(int ForegroundColor) {
 }
 
 int SymbolTable::hashFunction(string symbol) {
-	
+
 	int sum = 0;
-	
+
 	for (int i = 0; i < symbol.length(); i++) {
-		// Adding up the ASCII values of each character in the symbol
+		/// Adding up the ASCII values of each character in the symbol
 		sum = sum + symbol[i];
 	}
-	// Then modulo the index with the MAX_LENGTH and return the result
+	/// Then modulo the index with the %MAX_LENGTH and return the result
 	return (sum % MAX_LENGTH);
 }
 
 void SymbolTable::insert(string symbol, string type) {
-	
-	// Hash the symbol and get the position
+
+	/// Hash the symbol and get the @position
 	int position = hashFunction(symbol);
 	SymbolInfo* currentSymbol = new SymbolInfo(symbol, type);
 
-	// If the bucket is empty, create a new SymbolInfo object and store the symbol and type in it
+	/// If the bucket is empty, create a new ^SymbolInfo node and store the @symbol and @type in it
 	if (block[position] == NULL) {
 		block[position] = currentSymbol;
 	}
-	// If the bucket is not empty, add the new SymbolInfo node to the front of the linked list
+	/// If the bucket is not empty, add the new ^SymbolInfo node to the front of the linked list
 	else {
 		SymbolInfo* start = block[position];
 		while (start->next != NULL)
@@ -120,7 +119,7 @@ void SymbolTable::insert(string symbol, string type) {
 	SetColor(2);
 	cout
 		<< endl
-		<< "Inserted successfully"
+		<< "[INFO] Inserted successfully"
 		<< endl;
 }
 
@@ -164,15 +163,15 @@ void SymbolTable::dump() {
 }
 
 void SymbolTable::lookup(string symbol) {
-	
+
 	int position = hashFunction(symbol);
 	int found = 0;
 
-	// Hash the input value and put it on temp
+	/// Hash the input value and put it on @temp
 	SymbolInfo* temp = block[position];
 
-	// Compare temp with all element in the SymbolTable
-	// Return true if found otherwise, false
+	/// Compare @temp with all element in the ^SymbolTable
+	/// Return !true if found otherwise, !false
 	while (temp != NULL) {
 		if (temp->symbol == symbol) {
 			SetColor(11);
@@ -199,42 +198,46 @@ void SymbolTable::lookup(string symbol) {
 }
 
 bool SymbolTable::erase(string symbol) {
-	
-	int position = hashFunction(symbol);
-	
-	// Hash the input value and put it on temp
-	SymbolInfo* temp = block[position];
-	SymbolInfo* parameter = block[position];
 
-	// If the bucket is empty
+	int position = hashFunction(symbol);
+
+	/// Hash the input value and put it on @temp
+	SymbolInfo* temp = block[position];
+	SymbolInfo* temp2 = block[position];
+
+	/// If the bucket is empty
 	if (temp == NULL) {
 		return false;
 	}
-	// If a bucket has single element
+	/// If a bucket has single element
 	else if (temp->next == NULL && temp->symbol == symbol) {
 		block[position] = NULL;
 		delete temp;
 		return true;
 	}
-	// If a bucket has multiple elements,
+	/// If a bucket has multiple elements,
+	/// Compare @temp with all element in the ^SymbolTable
 	while (temp->symbol != symbol && temp->next != NULL) {
-		parameter = temp;
+		temp2 = temp;
 		temp = temp->next;
 	}
 
+	/// If the symbol is in the 2nd last position,
+	/// then set the previous node's next to %NULL
+	/// and delete the last node
 	if (temp->symbol == symbol && temp->next != NULL) {
-		if (parameter->symbol == temp->symbol) {
+		if (temp2->symbol == temp->symbol) {
 			block[position] = temp->next;
 		}
 		else {
-			parameter->next = temp->next;
+			temp2->next = temp->next;
 			temp->next = NULL;
 		}
 		delete temp;
 		return true;
 	}
 	else {
-		parameter->next = NULL;
+		temp2->next = NULL;
 		temp->next = NULL;
 		delete temp;
 		return true;
@@ -261,7 +264,6 @@ int main() {
 	SymbolTable ST;
 
 	int choice;
-
 	string symbol, type;
 
 	menu();
