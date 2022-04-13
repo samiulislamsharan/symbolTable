@@ -291,7 +291,7 @@ int main() {
 			break;
 
 		case 2:
-			cout << "\nInput symbol and type to lookup: ";
+			cout << "\nInput symbol lookup: ";
 			cin >> symbol;
 			ST.lookup(symbol);
 			break;
